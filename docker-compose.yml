@@ -2,21 +2,22 @@ version: '2'
 
 services:
     db:
-        image: mysql
+        image: mysql:5.7
         volumes:
             - "./.data/db:/var/lib/mysql"
         environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            MYSQL_DATABASE: ${MYSQL_DATABASE}
-            MYSQL_USER: ${MYSQL_USER}
-            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: "Abc123"
+            MYSQL_DATABASE: "sms_service"
+            MYSQL_USER: "farzaneh"
+            MYSQL_PASSWORD: "Abc123"
     php:
         build:
             context: php7-fpm
             args:
-                TIMEZONE: ${TIMEZONE}
+                TIMEZONE: "Asia/Tehran"
         volumes:
-            - ${SYMFONY_APP_PATH}:/var/www/symfony
+            - /Users/farzaneh/sms_simulator:/var/www/symfony
+            - /Users/farzaneh/sms_provider:/var/www/symfony2
             - ./logs/symfony:/var/www/symfony/app/logs
     nginx:
         build: nginx
@@ -26,13 +27,19 @@ services:
             - php
         volumes:
             - ./logs/nginx/:/var/log/nginx
-    elk:
-        image: willdurand/elk
-        ports:
-            - 81:80
-        volumes:
-            - ./elk/logstash:/etc/logstash
-            - ./elk/logstash/patterns:/opt/logstash/patterns
+    nginx2:
+        build: nginx/sender1
         volumes_from:
             - php
-            - nginx
+        volumes:
+            - ./logs/nginx/:/var/log/nginx
+    nginx3:
+        build: nginx/sender2
+        volumes_from:
+            - php
+        volumes:
+            - ./logs/nginx/:/var/log/nginx
+    
+    redis:
+        image: redis:latest
+

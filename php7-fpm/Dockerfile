@@ -1,5 +1,5 @@
 # See https://github.com/docker-library/php/blob/master/7.1/fpm/Dockerfile
-FROM php:7.1-fpm
+FROM php:7.3-fpm
 ARG TIMEZONE
 
 MAINTAINER Maxence POUTORD <maxence.poutord@gmail.com>
@@ -7,8 +7,11 @@ MAINTAINER Maxence POUTORD <maxence.poutord@gmail.com>
 RUN apt-get update && apt-get install -y \
     openssl \
     git \
-    unzip
+    unzip 
 
+# Install redis
+RUN pecl install redis
+RUN echo "extension=redis.so" >> $PHP_INI_DIR/conf.d/redis.ini
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
 && composer --version
