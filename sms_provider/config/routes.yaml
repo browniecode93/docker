@@ -1,0 +1,3 @@
+send_sms:
+  path:       /sms/send
+  controller: App\Controller\SmsProviderController::send_sms_to_users
