@@ -16,8 +16,8 @@ services:
             args:
                 TIMEZONE: "Asia/Tehran"
         volumes:
-            - /Users/farzaneh/sms_simulator:/var/www/symfony
-            - /Users/farzaneh/sms_provider:/var/www/symfony2
+            - /${SYMFONY_APP_PATH}/sms_simulator:/var/www/symfony
+            - /${SYMFONY_APP_PATH}/sms_provider:/var/www/symfony2
             - ./logs/symfony:/var/www/symfony/app/logs
     nginx:
         build: nginx
